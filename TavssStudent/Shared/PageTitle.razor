@@ -1,0 +1,51 @@
+﻿
+    <div id="demo" data-background="images/banner/banner-1.jpg" class="carousel slide" data-ride="carousel">
+
+        <ul class="carousel-indicators">
+        </ul>
+        <ul class="list-inline custom-breadcrumb" style="text-align: center;">
+            <li class="list-inline-item main-page-title"><a class="h2 text-primary font-secondary text-center" href="courses.html" style="color: #fff !important; font-size: 45px;">@Title </a></li>
+            <li class="list-inline-item text-white h3 font-secondary nasted"> <a href="course-lectures.html" style="color: #fff;"></a></li>
+            <li class="list-inline-item text-white h4 font-secondary nasted"> </li>
+        </ul>
+        <div class="carousel-inner">
+            <div class="carousel-item active">
+                <img src="images/banner/banner-1.jpg" alt="@Title" width="1100" height="350">
+                <div class="carousel-caption text-info" style="margin-bottom: 110px;">
+                    <h2 style="color: #fff !important; font-size: 45px;">@Title</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+@*<div id="demo" data-background="images/banner/banner-1.jpg" class="carousel slide" data-ride="carousel">
+
+    <ul class="carousel-indicators">
+        <li> Details </li>
+    </ul>
+    <ul class="list-inline custom-breadcrumb" style="text-align: center;">
+        <li class="list-inline-item main-page-title"><a class="h2 text-primary font-secondary text-center" href="courses.html" style="color: #fff !important; font-size: 35px;">@Title </a></li>
+        <li class="list-inline-item text-white h3 font-secondary nasted"> <a href="course-lectures.html" style="color: #fff;"></a></li>
+        <li class="list-inline-item text-white h4 font-secondary nasted"> </li>
+    </ul>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="images/banner/banner-1.jpg" alt="@Title" width="1100" height="500">
+            <div class="carousel-caption text-info" style="margin-bottom: 110px;">
+                <h2>@Title </h2>
+                <h3>@Desc</h3>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+@code{
+
+    [Parameter]
+    public string Title { get; set; } = "";
+
+    [Parameter]
+    public string Desc { get; set; } = "";
+}

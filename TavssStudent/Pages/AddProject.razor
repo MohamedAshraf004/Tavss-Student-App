@@ -1,0 +1,48 @@
+﻿@page "/addproject"
+@inherits AddProjectBase
+@attribute [Authorize]
+<!-- page title -->
+<PageTitle Title="Add project"></PageTitle>
+<!-- /page title -->
+
+
+
+<section class="section-sm" style="padding-top: 77px; padding-bottom: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                    <h2 class="mb-0 text-nowrap mr-3" style="margin-left: 1rem;">Add Project</h2>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                    <!-- <div>
+                      <a href="courses.html" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<EditForm Model="@Project" OnValidSubmit="@HandleValidSubmit">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    @*<label for="exampleInputEmail1" style="font-size: 20px; font-weight: bold; color: #2692d4e3;">Project Name</label>
+                    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">*@
+                    <InputText @bind-Value="@Project.Name" placeholder="Enter project name" style="width: 800px; margin: 20px auto;" type="text" class="form-control"
+                               id="projectname" aria-describedby="emailHelp"></InputText>
+                    <ValidationMessage class="offset-sm-3 col-sm-8" For="@(() => Project.Name)" />
+                </div>
+            </div>
+
+            <div class="col-12" style="text-align: center; margin-bottom: 103px;">
+                <button class="btn btn-primary" type="submit">Create</button>
+                <a class="btn btn-primary" href="@($"/projects")">Back to the projects</a>
+            </div>
+
+        </div>
+    </div>
+</EditForm>
+

@@ -1,0 +1,125 @@
+﻿@page "/posts/{CommunityId}"
+@page "/posts"
+@inherits DisplayPostsBase
+@attribute [Authorize]
+
+<PageTitle Title="Display All Posts"></PageTitle>
+
+
+<!-- Page Content -->
+<div class="container">
+
+    <div class="row">
+
+        @if (Posts == null)
+        {
+
+            <section class="section-sm" style="padding-top: initial; padding-bottom: 20px;">
+                <div class="container">
+                    <!-- course list -->
+                    <div class="card mb-4" style="width:800px;margin-left:80px;">
+                       
+                            <div class="card-body">
+                                <h2 class="card-title">No Posts</h2>
+                            </div>
+                            <button @onclick="@QuickAddPost" class="btn btn-dark table-btn quick-add-btn ">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+                            <AddPostDialog CommunityId="@CommunityId" @ref="@AddPostDialog" CloseEventCallback="@AddPostDialog_OnDialogClose"></AddPostDialog>
+                    </div>
+                    <!-- /course list -->
+                    <!-- mobile see all button -->
+                    <div class="row">
+                        <div class="col-9 text-center">
+                            <a href="@($"/posts")" style="width: 140px;" class="btn btn-lg btn-primary-outline d-lg-none d-inline-block">See Other Community Posts</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            
+        }
+        else
+        {
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+
+                <h1 class="my-4">
+                    @Title
+                </h1>
+                <h4 style="padding: 0px 0px;">
+
+                    <button @onclick="@QuickAddPost" style="padding: 0px 0px;"
+                            class="btn btn-info table-btn quick-add-btn ">
+                        &nbsp;Add Post &nbsp;+&nbsp;&nbsp;
+                    </button>
+                    <AddPostDialog @ref="@AddPostDialog" CloseEventCallback="@AddPostDialog_OnDialogClose"></AddPostDialog>
+                </h4>
+                <!-- Blog Post -->
+                @foreach (var post in Posts)
+                {
+                    //750x300
+                    <div class="card mb-4">
+                        @{
+                            if (post != null && post.Image != null && post.Image.Contains("wwwroot"))
+                            {
+                                Logo = post.Image.Split("wwwroot");
+                                //ProjectPath = project.ProjectPath.Split("wwwroot");
+
+                                <img class="card-img-top" src="@(Localhost + Logo[1])" alt="@post.Title">
+
+                            }
+                            else
+                            {
+
+                                <img class="card-img-top" src="/images/blog/post-3.jpg" alt="@post.Title">
+
+                            }
+                        }
+                        <div class="card-body">
+                            <h2 class="card-title">@post.Title </h2>
+                            <p class="card-text">@post.Description</p>
+                        </div>
+                        <div class="card-footer text-muted">
+                            Posted on @post.Time by
+                            <a class="text-info">@Developers.FirstOrDefault(d => d.Id == post.IssuerId).Name</a>
+                        </div>
+                    </div>
+                }
+
+                <!-- Pagination -->
+                <ul class="pagination justify-content-center mb-4">
+                    @if (PageNumber <= 0)
+                    {
+                        <li class="page-item disabled">
+                            <Button class="page-link" @onclick="DecreasePage">&larr; Older</Button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <Button class="page-link" @onclick="DecreasePage">&larr; Older</Button>
+                        </li>
+                    }
+
+                    @if (PageNumber >= PageCount)
+                    {
+                        <li class="page-item disabled">
+                            <Button class="page-link" @onclick="IncreasePage">Newer &rarr;</Button>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="page-item">
+                            <Button class="page-link" @onclick="IncreasePage">Newer &rarr;</Button>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+
+        }
+
+
+    </div>
+    <!-- /.row -->
+
+</div>

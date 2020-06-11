@@ -1,0 +1,72 @@
+﻿@page "/companies/{CommunityId}"
+@page "/companies"
+@inherits DisplayCompaniesBase
+@attribute [Authorize]
+
+
+<PageTitle Title="All Companies"></PageTitle>
+<!-- Compaies section -->
+<section class="section-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <h2 class="mb-0 text-nowrap mr-3">Campaines</h2>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                </div>
+            </div>
+        </div>
+        <div class="row ">
+            @if (Companies == null)
+            {
+                <h1 class="btn-outline-info offset-2">No Companies</h1>
+            }
+            else
+            {
+                @foreach (var company in Companies)
+                {
+                    <!-- course item -->
+                    <div class=" col-sm-6 mb-5" style="width: 500px">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow">
+                            @{
+                                if (company != null && company.LogoPath != null && company.LogoPath.Contains("wwwroot"))
+                                {
+                                    Logo = company.LogoPath.Split("wwwroot");
+                                    //ProjectPath = project.ProjectPath.Split("wwwroot");
+
+                                    <img class="card-img-top" style="width:410px;height:340px" src="@(Localhost + Logo[1])" alt="@company.Name">
+
+                                }
+                                else
+                                {
+                                    <img class="card-img-top rounded-0" src="images/courses/course-1.jpg" alt="@company.Name">
+                                }
+                            }
+                            <div class="card-body">
+                                <h4 class="d-none d-sm-block">Name</h4>
+                                <p class="card-text mb-4"> @company.Name </p>
+                                <h6 class="d-none d-sm-block">Description</h6>
+                                <p class="card-text mb-4"> @company.Description </p>
+                                <h6 class="d-none d-sm-block">Address</h6>
+                                <p class="card-text mb-4"> @company.Address</p>
+                                <h6 class="d-none d-sm-block">Start Date</h6>
+                                <p class="card-text mb-4"> @company.StartDate.ToShortDateString()</p>
+                                <div class="social-link">
+                                    <h6 class="d-none d-sm-block">Social Link</h6>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="ti-facebook"></i></a></li>
+                                        <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="ti-twitter-alt"></i></a></li>
+                                        <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="https://twitter.com/Lionelmido004"><i class="ti-linkedin"></i></a></li>
+                                        <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="ti-instagram"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- course item -->
+                }
+            }
+        </div>
+    </div>
+</section>
+<!-- Compaies section -->

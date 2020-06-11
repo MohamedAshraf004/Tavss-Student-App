@@ -1,0 +1,163 @@
+﻿@page "/topicdetails/{CourseId}/{ModeuleId}/{TopicId}"
+@inherits TopicDetailsBase
+@attribute [Authorize]
+
+@using TavssStudent.Models
+
+@if (Topic == null)
+{
+    <PageTitle Title="Topic Details"></PageTitle>
+}
+else
+{
+    <PageTitle Title="Topic Details" Desc="@Topic.Discription"></PageTitle>
+
+}
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="row justify-content-center m-3">
+            <div class="col-sm-8">
+                @if (Topic != null)
+                {
+                    <div class="card" style="width: 570px;">
+                        <div class="card-header">
+                            <h1 style="font-size: 35px;">@Topic.Name</h1>
+                        </div>
+                        <div class="card-body text-center">
+                            @{
+                                var values = Enum.GetNames(typeof(TopicType));
+                                var topicType = Enum.GetName(typeof(TopicType), Topic.Type);
+
+                            }
+                            @if (TopicPath != null && values[0] == topicType)
+                            {
+                                <div class="offset-1 col-10">
+                                        <div class="embed-responsive embed-responsive-16by9">
+                                            <iframe class="embed-responsive-item pause fa-pause-circle ti-control-pause"
+                                                    src="@(Localhost + TopicPath[1])"></iframe>
+                                        </div>
+                                    </div>
+                                @*<embed style=" width: 100%;" src="@(Localhost + TopicPath[1])" width="600px" height="600px" />*@
+
+                                <h2>
+                                    Click here to
+                                    <a href="@(Localhost + TopicPath[1])" class=" btn-outline-info" target="_blank">
+                                        download
+                                    </a>
+
+                                </h2>
+
+                            }
+                            @if (TopicPath != null && values[1] == topicType)
+                            {
+                                @*<embed style=" width: 100%;" src="@(Localhost + TopicPath[1])" width="600px" height="600px" />*@
+
+                                <h2>
+                                    Click here to
+                                    <a href="@(Localhost + TopicPath[1])" class=" btn-outline-info" target="_blank">
+                                        download
+                                    </a>
+
+                                </h2>
+
+                            }
+
+                            @if (TopicPath != null && values[2] == topicType)
+                            {
+                                <embed style=" width: 100%;" src="@(Localhost + TopicPath[1])" width="600px" height="600px" />
+                                <h2>
+                                    Click here to
+                                    <a href="@(Localhost + TopicPath[1])" class=" btn-outline-info" target="_blank">
+                                        download
+                                    </a>
+
+                                </h2>
+                            }
+                            @if (TopicPath != null && values[3] == topicType)
+                            {
+                                <embed style=" width: 100%;" src="@(Localhost + TopicPath[1])" width="600px" height="600px" />
+                                <h2>
+                                    Click here to
+                                    <a href="@(Localhost + TopicPath[1])" class=" btn-outline-info" target="_blank">
+                                        download
+                                    </a>
+
+                                </h2>
+                            }
+                            @if (TopicPath != null && values[4] == topicType)
+                            {
+                                <embed style=" width: 100%;" src="@(Localhost + TopicPath[1])" width="600px" height="600px" />
+                                <h2>
+                                    Click here to
+                                    <a href="@(Localhost + TopicPath[1])" class=" btn-outline-info" target="_blank">
+                                        download
+                                    </a>
+
+                                </h2>
+                            }
+
+                            @if (TopicPath != null && values[5] == topicType)
+                            {
+                                <img style=" width: 100%;" class="card-img-top" src="@(Localhost + TopicPath[1])" width="600px" height="600px"
+                                     asp-append-version="true" />
+                                <h2>
+                                    Click here to
+                                    <a href="@(Localhost + TopicPath[1])" class=" btn-outline-info" target="_blank">
+                                        download
+                                    </a>
+
+                                </h2>
+                            }
+
+
+                            <h4>Topic Name : @Topic.Name</h4>
+
+                            <div class="container">
+                                <h6>Topic Description : </h6>
+                                <p>
+                                    @Topic.Discription
+                                </p>
+                            </div>
+                        </div>
+                        <div class="card-footer text-center">
+                            <button @onclick="()=>HandleClick(ModeuleId)"
+                                    class="btn btn-primary">
+                                Back
+                            </button>
+                        </div>
+                    </div> }
+                else
+                {
+                    <div class="spinner"></div>}
+
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5">
+        <div class="row justify-content-center m-3">
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 style="font-size: 35px;">Other Topics</h1>
+                    </div>
+                    @if (Topics != null && Topics.Count() > 0)
+                    {
+                        <div class="card-body">
+
+                            @foreach (var topic in Topics.OrderBy(p => p.Position).ThenBy(n => n.Name))
+                            {
+                                <a href="@($"/topicdetails/{CourseId}/{ModeuleId}/{topic.Id}")" @onclick="()=>HandleClickTopic(CourseId,ModeuleId,topic.Id)">
+                                    <h5 class="section-title">@topic.Name</h5>
+                                </a>}
+
+                        </div> }
+                    else
+                    {
+                        <h1 class="btn-outline-info" style="font-size: 32px;">No Topics</h1>}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

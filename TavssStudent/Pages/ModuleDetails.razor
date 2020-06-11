@@ -1,0 +1,150 @@
+﻿@page "/moduledetails/{CourseId}/{ModeuleId}"
+@inherits ModuleDetailsBase
+@attribute [Authorize]
+
+<base href="~/" />
+<h3>Module Details</h3>
+@if (Module == null || Course == null)
+{
+    <PageTitle Title="Details for lecture"></PageTitle>
+    <h1>Loading</h1>
+}
+else
+{
+    <!-- page title -->
+    <PageTitle Title="Details for lecture" Desc="@Module.Name"></PageTitle>
+    <!-- /page title -->
+
+
+    <!-- Content -->
+    <section class="section bg-cover">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-7 col-sm-4 position-relative success-video">
+                    @*<embed src="AI.pdf" width="600px" height="600px" />*@
+                    @if (TopicPath != null)
+                    {
+                        <embed src="@(Localhost + TopicPath[1])" width="600px" height="600px" />
+
+                    }
+                    else
+                    {
+                        <h1>No pdf to display</h1>
+                    }
+                </div>
+                <div class="col-lg-5 col-sm-8">
+                    <div style="background-color: #f8f8f8; padding: 13px; text-align: center;">
+                        @if (Module.Topics != null && Module.Topics.Count > 0)
+                        {
+                            <h3>Topics</h3>
+                            <ol>
+                                @foreach (var topic in Module.Topics.OrderBy(p => p.Position).ThenBy(n => n.Name))
+                                {
+                                    <li>
+                                        <a href="@($"/topicdetails/{CourseId}/{ModeuleId}/{topic.Id}")">
+                                            <h5 class="section-title">@topic.Name</h5>
+                                        </a>
+                                    </li>
+                                }
+                            </ol>
+                        }
+                        else
+                        {
+                            <h1 class="btn-outline-info">No Topics</h1>
+                        }
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /Content -->
+
+    <!-- Video -->
+    <h3 class="offset-2">Introduction For Module</h3>
+    <div class="offset-1 col-10">
+        @if (VideoPath != null)
+        {
+            @*<embed src="@(Localhost + VideoPath[1])" width="600px" height="600px" />*@
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe class="embed-responsive-item pause fa-pause-circle ti-control-pause" src="@(Localhost + VideoPath[1])"></iframe>
+            </div>
+
+        }
+        else
+        {
+            <h1>No video to display</h1>
+        }
+
+    </div>
+
+
+    <!-- section -->
+    <section class="section-sm">
+        <div class="container">
+            <div class="row">
+                <!-- teacher -->
+                <div class="col-12">
+                    <h5 class="mb-3">Doctor</h5>
+                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                        <div class="media mb-2 mb-sm-0">
+                            <img class="mr-4 img-fluid" style="height:150px;width:150px;"
+                                 asp-append-version="true" src="images/teachers/doctor.jpg" alt="Teacher">
+                            <div class="media-body">
+                                @if (Course.Doctors.Count > 0)
+                                {
+                                    @foreach (var dr in Course.Doctors)
+                                    {
+                                        <h4 class="mt-0">@dr.Name</h4>
+                                    }
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                    <div class="border-bottom border-primary mt-4"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /section -->
+    <!-- related course -->
+    <section class="section pt-0">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="section-title">Next Lectures</h2>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <!-- course item -->
+                @if (Course.Modules.Where(m => m.Id != ModeuleId).ToList().Count > 0)
+                {
+                    @foreach (var module in Course.Modules.Where(m => m.Id != ModeuleId).OrderBy(o => o.Position).ThenBy(m => m.Id).Take(3))
+                    {
+                        <div class="col-lg-4 col-sm-6 mb-5">
+                            <div class="card p-0 border-primary rounded-0 hover-shadow">
+                                <a href="@($"/moduledetails/{CourseId}/{module.Id}")" @onclick="()=>HandleClick(module.Id)">
+                                    <img class="card-img-top rounded-0" asp-append-version="true" style="width:320px;height:220px"
+                                         src="images/courses/course2.jpg" alt="course thumb">
+                                </a>
+                                <div class="card-body">
+                                    <a href="@($"/moduledetails/{CourseId}/{module.Id}")" @onclick="()=>HandleClick(module.Id)">
+                                        <h4 class="card-title">@module.Name</h4>
+                                    </a>
+                                    <a href="@($"/moduledetails/{CourseId}/{module.Id}")" @onclick="()=>HandleClick(module.Id)" class="btn btn-primary btn-sm">Start</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <h1 class="btn-outline-info offset-2">No Lectures</h1>
+                }
+                <!-- /course item -->
+            </div>
+        </div>
+    </section>
+    <!-- /related course -->
+}

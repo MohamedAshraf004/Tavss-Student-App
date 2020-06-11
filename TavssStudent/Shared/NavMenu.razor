@@ -1,0 +1,117 @@
+﻿<!-- top header -->
+<div class="top-header py-2 bg-white">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-lg-4 text-center text-lg-left">
+                <!-- <a class="text-color mr-3" href="callto:+443003030266"><strong>CALL</strong> +44 300 303 0266</a> -->
+                <ul class="list-inline d-inline">
+                    <li class="list-inline-item mx-0"><a class="d-inline-block p-2" style="color: #fff" href="#"><i class="ti-facebook"></i></a></li>
+                    <li class="list-inline-item mx-0"><a class="d-inline-block p-2" style="color: #fff" href="#"><i class="ti-twitter-alt"></i></a></li>
+                    <li class="list-inline-item mx-0"><a class="d-inline-block p-2" style="color: #fff" href="#"><i class="ti-linkedin"></i></a></li>
+                    <li class="list-inline-item mx-0"><a class="d-inline-block p-2" style="color: #fff" href="#"><i class="ti-instagram"></i></a></li>
+                </ul>
+            </div>
+            <div class="col-lg-8 text-center text-lg-right">
+                <ul class="list-inline">
+                    <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="#"></a></li>
+                    <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="#"></a></li>
+                    <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="#"></a></li>
+                    <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="#" data-toggle="modal" data-target="#loginModal"></a></li>
+                    <li class="list-inline-item"><a class="text-uppercase text-color p-sm-2 py-2 px-0 d-inline-block" href="#" data-toggle="modal" data-target="#signupModal"></a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- navbar -->
+<div class="navigation w-100">
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light p-0">
+            <a class="navbar-brand" href=""><img src="images/TAVSSv1.png" alt="logo" style="width:115px; height: 50px;"></a>
+            <button class="navbar-toggler rounded-0" type="button" data-toggle="collapse" data-target="#navigation"
+                    aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navigation">
+                <ul class="navbar-nav ml-auto text-center">
+                    <AuthorizeView>
+                        <Authorized>
+                            <NavLink class="nav-item" href="/" Match="NavLinkMatch.All">
+                                <NavLink class="nav-link">Home</NavLink>
+                            </NavLink>
+                            <NavLink class="nav-item" Match="NavLinkMatch.All">
+                                <NavLink class="nav-link" href="/courses">COURSES</NavLink>
+                            </NavLink>
+                            <NavLink class="nav-item" Match="NavLinkMatch.All">
+                                <NavLink class="nav-link" href="/projects">PROJECTS</NavLink>
+                            </NavLink>
+                            <NavLink class="nav-item " Match="NavLinkMatch.All">
+                                <a class="nav-link" href="/acclaims">ACCLAIMS</a>
+                            </NavLink>
+                            <NavLink class="nav-item " Match="NavLinkMatch.All">
+                                <a class="nav-link" href="/communities">COMMUNITIES</a>
+                            </NavLink>
+                            <NavLink class="nav-item" Match="NavLinkMatch.All">
+
+                            </NavLink>
+                        </Authorized>
+                        <NotAuthorized>
+                            <NavLink class="nav-item" href="/" Match="NavLinkMatch.All">
+                                <NavLink class="nav-link"></NavLink>
+                            </NavLink>
+                            <NavLink class="nav-item" Match="NavLinkMatch.All">
+
+                            </NavLink>
+                            <NavLink class="nav-item" Match="NavLinkMatch.All">
+
+                            </NavLink>
+                            <NavLink class="nav-item" Match="NavLinkMatch.All">
+
+                            </NavLink>
+                        </NotAuthorized>
+                    </AuthorizeView>
+                    <NavLink class="nav-item dropdown view" style="margin-top: 28px;" Match="NavLinkMatch.All">
+                        <a class="nav-link dropdown-toggle" href="#" style="display: inline;" id="navbarDropdown" role="button" data-toggle="dropdown"
+                           aria-haspopup="true" aria-expanded="false">
+                            <AuthorizeView>
+                                <Authorized>
+                                    @{
+                                        var user = (@context.User.Claims.FirstOrDefault(c => c.Type
+                         == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value).Split("@");
+                                    }
+                                    <img src="/images/Mohamed.JPG" class="user-img">
+                                    Logout (@user[0])
+                                </Authorized>
+                                <NotAuthorized>
+                                    <img src="https://via.placeholder.com/150" class="user-img">
+                                    Sign In
+                                </NotAuthorized>
+                            </AuthorizeView>
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <AuthorizeView>
+                                <NotAuthorized>
+                                    <a class="dropdown-item" href="/identity/account/login">Login</a>
+                                    <a class="dropdown-item" href="/identity/account/register">Register</a>
+                                </NotAuthorized>
+                                <Authorized>
+                                    @{
+                                        var user = (@context.User.Claims.FirstOrDefault(c => c.Type
+                      == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value).Split("@");
+                                    }
+                                    <a class="dropdown-item" href="/Identity/Account/Logout">
+                                        LOG OUT (@user[0])
+                                    </a>
+                                    <a class="dropdown-item" href="/Identity/Account/Manage/Index">
+                                        Manage Account (@user[0])
+                                    </a>
+                                </Authorized>
+                            </AuthorizeView>
+                        </div>
+                    </NavLink>
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>

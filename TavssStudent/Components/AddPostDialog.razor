@@ -1,0 +1,55 @@
+﻿@inherits AddPostDialogBase
+@using TavssStudent.Models
+@if (ShowDialog)
+{
+    <div class="modal fade show d-block" id="exampleModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">Post Quick Add</h5>
+                    <button type="button" class="close" data-dismiss="modal" @onclick="@CloseDialog" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <EditForm Model="@Post" OnValidSubmit="@HandleValidSubmit">
+
+                        <DataAnnotationsValidator />
+
+                        <div class="form-group">
+                            <label for="Title">Title: </label>
+                            <InputText id="Title" class="form-control" @bind-Value="@Post.Title" placeholder="Enter Post Title "></InputText>
+                            <ValidationMessage style="color:red;" For="@(() => Post.Title)" />
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastName"> Descreption: </label>
+                            <InputText id="Description" class="form-control" @bind-Value="@Post.Description" placeholder="Enter Post Descreption "></InputText>
+                            <ValidationMessage style="color:red;" For="@(() => Post.Description)" />
+                        </div>
+                        <label for="Developer" class="col-sm-3">Developer: </label>
+                        <InputSelect id="Developer" class="form-control col-sm-8" @bind-Value="@DeveloperId">
+                            @foreach (var developer in Developers)
+                                {
+                                <option value="@developer.Id">@developer.Name</option>
+                                }
+                        </InputSelect>
+                        <div class="form-group row">
+                            <label for="Developer" class="col-sm-3">Issuer: </label>
+                            <InputSelect @bind-Value="Post.IssuerType" class="form-control">
+                                @foreach (var issur in Enum.GetValues(typeof(IssuerType)))
+                                    {
+                                    <option value="@issur">@issur</option>
+                                    }
+                            </InputSelect>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Create Post</button>
+                        <a class="btn btn-outline-primary" @onclick="@CloseDialog">Close</a>
+                    </EditForm>
+
+                </div>
+            </div>
+        </div>
+    </div>
+}

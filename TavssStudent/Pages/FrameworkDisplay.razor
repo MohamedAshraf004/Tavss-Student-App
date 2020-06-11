@@ -1,0 +1,192 @@
+﻿@inherits FrameworkDisplayBase
+@attribute [Authorize]
+
+<div class="row">
+    @*ToDo*@
+    <div class="col-lg-4 col-md-4 overflow-auto" style="max-height:370px; height:370px">
+        <div class="row d-flex justify-content-center container">
+            <div class="col-md-12">
+                <div class="card-hover-shadow-2x mb-3 card" style="border:1px solid;width:315px;">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;ToDos Tasks List &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-clock"></i> &nbsp;@ToDoDuration</div>
+                    </div>
+                    <div class="scroll-area-sm">
+                        <perfect-scrollbar class="ps-show-limits">
+                            <div style="position: static;" class="ps ps--active-y">
+                                <div class="ps-content">
+                                    <ul class=" list-group list-group-flush">
+                                        @if (Framework.ToDos != null)
+                                        {
+                                            @foreach (var toDo in Framework.ToDos)
+                                            {
+                                                <li class="list-group-item">
+                                                    <div class="todo-indicator bg-warning"></div>
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-2">
+                                                                <div class="custom-checkbox custom-control"> </div>
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                <div class="widget-heading ">
+                                                                    @toDo.Name <div class="badge badge-info offset-2">
+                                                                        Start Date: @toDo.StartDate.ToShortDateString()
+                                                                    </div><div class="badge badge-danger offset-2" style="margin-left: 115px;">End Date: @toDo.EndDate.ToShortDateString()</div>
+                                                                </div>
+                                                                <div class="widget-subheading"><i>@toDo.Descreption</i></div>
+                                                            </div>
+                                                            <div class="widget-content-right"><button class="border-0 btn-transition btn btn-outline-danger"  @onclick="@(e=>DeleteToDoAsync(toDo.Id))"> <i class="fa fa-trash"></i> </button> </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+
+                                            }
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*InProgress*@
+
+
+    <div class="col-md-4 overflow-auto" style="max-height:370px; height:370px">
+
+
+        <div class="row d-flex justify-content-center container">
+            <div class="col-md-12">
+                <div class="card-hover-shadow-2x mb-3 card" style="border: 1px solid;width: 315px;">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;InProgress Tasks List &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-clock"></i> &nbsp;@InProgressDuration</div>
+                    </div>
+                    <div class="scroll-area-sm">
+                        <perfect-scrollbar class="ps-show-limits">
+                            <div style="position: static;" class="ps ps--active-y">
+                                <div class="ps-content">
+                                    <ul class=" list-group list-group-flush">
+                                        @if (Framework.InProgress != null)
+                                        {
+                                            @foreach (var inProgress in Framework.InProgress)
+                                            {
+                                                <li class="list-group-item">
+                                                    <div class="todo-indicator bg-info"></div>
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-2">
+                                                                <div class="custom-checkbox custom-control"> </div>
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                @if (Framework.InProgress.Count() == 0)
+                                                                {<h6>No Tasks</h6>}
+
+                                                                <div class="widget-heading ">
+                                                                    @inProgress.Name <div class="badge badge-info offset-2">
+                                                                        Start Date: @inProgress.StartDate.ToShortDateString()
+                                                                    </div><div class="badge badge-danger offset-2" style="margin-left: 115px;">End Date: @inProgress.EndDate.ToShortDateString()</div>
+                                                                </div>
+                                                                <div class="widget-subheading"><i>@inProgress.Descreption</i></div>
+                                                            </div>
+                                                            <div class="widget-content-right">
+                                                                <button class="border-0 btn-transition btn btn-outline-danger"
+                                                                        @onclick="@(e=>DeleteInProgressAsync(inProgress.Id))">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <h6>No Tasks</h6>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @*Done*@
+    <div class="col-md-4 overflow-auto" style="max-height:370px; height:370px">
+        <div class="row d-flex justify-content-center container">
+            <div class="col-md-12">
+                <div class="card-hover-shadow-2x mb-3 card" style="border:1px solid;width:315px;">
+                    <div class="card-header-tab card-header">
+                        <div class="card-header-title font-size-lg text-capitalize font-weight-normal"><i class="fa fa-tasks"></i>&nbsp;Dones Tasks List &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-clock"></i> &nbsp;@DoneDuration</div>
+                    </div>
+                    <div class="scroll-area-sm">
+                        <perfect-scrollbar class="ps-show-limits">
+                            <div style="position: static;" class="ps ps--active-y">
+                                <div class="ps-content">
+                                    <ul class=" list-group list-group-flush">
+                                        @if (Framework.Dones != null)
+                                        {
+                                            @foreach (var done in Framework.Dones)
+                                            {
+                                                <li class="list-group-item">
+                                                    <div class="todo-indicator bg-success"></div>
+                                                    <div class="widget-content p-0">
+                                                        <div class="widget-content-wrapper">
+                                                            <div class="widget-content-left mr-2">
+                                                                <div class="custom-checkbox custom-control"> </div>
+                                                            </div>
+                                                            <div class="widget-content-left">
+                                                                @if (Framework.Dones.Count() == 0)
+                                                                {<h6>No Tasks</h6>}
+
+                                                                <div class="widget-heading ">
+                                                                    @done.Name <div class="badge badge-info offset-2">
+                                                                        Start Date: @done.StartDate.ToShortDateString()
+                                                                    </div><div class="badge badge-danger offset-2" style="margin-left: 115px;">End Date: @done.EndDate.ToShortDateString()</div>
+                                                                </div>
+                                                                <div class="widget-subheading"><i>@done.Descreption</i></div>
+                                                            </div>
+                                                            <div class="widget-content-right">
+                                                                <button class="border-0 btn-transition btn btn-outline-danger"
+                                                                        @onclick="@(e=>DeleteDoneAsync(done.Id))">
+                                                                    <i class="fa fa-trash"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <h6>No Tasks</h6>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                        </perfect-scrollbar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- buttons -->
+<div class="row" style="margin-bottom:20px">
+    <div class="col-md-4" style="text-align: center; margin-top: 15px; ">
+        <a class="btn btn-primary" style="width:90%; border-radius: 20px;" href="@($"/addtodo/{ProjectId}")">Add ToDo</a>
+    </div>
+    <div class="col-md-4" style="text-align: center; margin-top: 15px;">
+        <a class="btn btn-primary" style="width:90%; border-radius: 20px;" href="@($"/addinprogress/{ProjectId}")">Add InProgress</a>
+    </div>
+    <div class="col-md-4" style="text-align: center; margin-top: 15px;">
+        <a class="btn btn-primary" style="width:90%; border-radius: 20px;" href="@($"/adddone/{ProjectId}")">Add done</a>
+    </div>
+</div>
+<!-- /buttons -->

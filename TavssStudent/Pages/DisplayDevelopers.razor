@@ -1,0 +1,71 @@
+﻿@page "/developers/{CommunityId}"
+@inherits DisplayDevelopersBase
+@attribute [Authorize]
+
+
+<PageTitle Title="All Developers" Desc="Display all developers"></PageTitle>
+<!--developer section-->
+<section class="section-sm" style="padding-top: 115px; padding-bottom: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <h2 class="mb-0 text-nowrap mr-3">All developers</h2>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                </div>
+            </div>
+        </div>
+        <!-- course list -->
+        <div class="row justify-content-center">
+            <!-- course item -->
+            <div class="container">
+                @if (Developers == null)
+                {
+                    <h1 class="btn-outline-info offset-2">No Developers</h1>
+                }
+                else
+                {
+                    @if (Developers.Count() == 0)
+                    {
+                        <h1 class="btn-outline-info offset-2">No Developers</h1>
+                    }
+                    else
+                    {
+                        @foreach (var developer in Developers)
+                        {
+                            <div class="row">
+                                <!-- teacher -->
+                                <div class="col-12">
+                                    <h5 class="mb-3">Developer</h5>
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                        <div class="media mb-2 mb-sm-0">
+                                            <img class="mr-4 img-fluid" src="images/teacher.jpg" alt="Teacher">
+                                            <div class="media-body">
+                                                <h4 class="mt-0">@developer.Name</h4>
+                                            </div>
+                                        </div>
+                                        <div class="social-link">
+                                            <h6 class="d-none d-sm-block">Social Link</h6>
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-twitter"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-facebook-square"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-github"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-linkedin-square"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-instagram"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="border-bottom border-primary mt-4"></div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /developer section -->

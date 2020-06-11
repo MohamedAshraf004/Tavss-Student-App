@@ -1,0 +1,290 @@
+﻿@page "/projectdetails/{ProjectId}"
+@inherits ProjectDetailsBase
+@attribute [Authorize]
+<!-- page title -->
+<PageTitle Title="Details for project" Desc="@Project.ProjectName"></PageTitle>
+<!-- /page title -->
+<!-- section -->
+<section class="section-sm">
+    <div class="container">
+        <!-- course info -->
+        <div class="row align-items-center mb-5">
+            <div class="col-xl-3 order-1 col-sm-6 mb-4 mb-xl-0">
+                <h3>IS</h3>
+            </div>
+            <div class="col-xl-6 order-sm-3 order-xl-2 col-12 order-2">
+                <ul class="list-inline text-xl-center">
+                    <li class="list-inline-item mr-4 mb-3 mb-sm-0">
+                        <div class="d-flex align-items-center">
+                            <i class="ti-face-smile text-primary icon-md mr-2"></i>
+                            <div class="text-left">
+                                <h6 class="mb-0">MEMBERS</h6>
+                                <p class="mb-0">@Project.Developer.Count()</p>
+                            </div>
+                        </div>
+                    </li>
+                    <li class="list-inline-item mr-4 mb-3 mb-sm-0">
+                        <div class="d-flex align-items-center">
+                            <i class="ti-alarm-clock text-primary icon-md mr-2"></i>
+                            <div class="text-left">
+                                <h6 class="mb-0">DURATION</h6>
+                                @if (Project.Framework != null && Project.Framework.ToDos != null)
+                                {
+                                    <p class="mb-0"><i class="fas fa-clock"></i> &nbsp;@MaxDuration Day</p>
+                                }
+                                else
+                                {
+                                    <p class="mb-0">0 Day</p>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xl-3 text-sm-right text-left order-sm-2 order-3 order-xl-3 col-sm-6 mb-4 mb-xl-0">
+
+                <button @onclick="ProjectDownload " class="btn btn-primary"> Download Now</button>
+
+            </div>
+            <!-- border -->
+            <div class="col-12 mt-4 order-4">
+                <div class="border-bottom border-primary"></div>
+            </div>
+        </div>
+        <!-- project details -->
+        <div class="row">
+            <div class="col-6  offset-3 mb-4">
+                <div class="col-6  offset-1 mb-4">
+                    <!-- course thumb -->
+                    @if (ShowDownload)
+                    {
+                        @if (Project != null && WikiDownloadPath != null)
+                        {
+                            <embed src="@(WikiDownloadPath)" width="500px" height="300px" />
+                            <p>
+                                you can <a href="@(WikiDownloadPath)" target="_blank">
+                                    click here to download the wiki.
+                                </a>
+                            </p>
+                            @*<object data="@(ProjectDownloadPath)" type="application/pdf" width="100%" height="500px">
+                                <p>
+                                    It appears you don't have a PDF plugin for this browser.
+                                    No biggie... you can <a href="@(ProjectDownloadPath)">
+                                        click here to
+                                        download the PDF file.
+                                    </a>
+                                </p>
+                                </object>*@
+
+
+                        }
+                        @if (Project != null && ProjectDownloadPath != null)
+                        {
+
+                            <p>
+                                you can <a class="btn-outline-success" href="@(ProjectDownloadPath)" target="_blank">
+                                    click here to download the project.
+                                </a>
+                            </p>
+
+                        }
+                        @if (Project != null && ProjectDownloadPath == null && WikiDownloadPath == null)
+                        {
+                            <h4 class="offset-2">There is nothing to download.</h4>
+                        }
+
+
+                    }
+                </div>
+
+                <!-- course thumb -->
+                @if (Project != null && Logo != null)
+                {
+                    <img src="@(Localhost + Logo[1])" style="height:250px;"
+                         class="img-fluid w-100" alt="project's image">
+                }
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /section -->
+
+
+
+@if (Project.Id != null && Project.Framework != null && (Project.Framework.ToDos.Count() > 0
+|| Project.Framework.InProgress.Count() > 0 || Project.Framework.Dones.Count() > 0))
+{
+
+    <FrameworkDisplay FrameworkParm="@Project.Framework" ProjectId="@Project.Id" OnProjectDeleted="ProjectDeleted">
+    </FrameworkDisplay>
+
+
+    @if (Project.Framework.ToDos.Count() == 0 && Project.Framework.Dones.Count() == 0 && Project.Framework.InProgress.Count() == 0)
+    {
+        <a class="btn btn-primary" style="margin:70px 70px;width:400px" href="@($"/addtodo/{ProjectId}")">add todo</a>
+    }
+
+
+}
+@if (Project.Framework == null)
+{
+    <div>
+        <a class="btn btn-primary col align-self-center" style="margin:70px 70px;width:400px" @onclick="CreateFrameworkAsync"> Create Framework</a>
+    </div>
+}
+else
+{
+    @if (Project.Framework.ToDos.Count() == 0 && Project.Framework.Dones.Count() == 0 && Project.Framework.InProgress.Count() == 0)
+    {
+        <div>
+            <a class="btn btn-primary col align-self-center" href="@($"/addtodo/{ProjectId}")">add todo</a>
+        </div>
+    }
+}
+
+
+<div>
+    <div class="row" style="margin-top:20px;margin-left:5px">
+        <!-- supervisior -->
+        @if (@Project.SuperVisior.Name == "No Doctor yet.")
+        {
+            @*<a class="btn btn-primary" href="@($"/addsupervisior/{ProjectId}")">Assign Doctor To The Project</a>*@
+            <div class="col-md-4">
+                <div class="card mx-sm-1 p-3" style="border: 1px solid rgb(112, 112, 112); width: 90%;max-height: 200px;height:200px;margin-left:70px">
+                    <div class="card shadow text-info  my-card" style="width: 60px; border: 1px solid rgb(112, 112, 112);margin-left:100px"><img src="/images/project/man.png" alt="" style="width: 40%; margin: 10px 0px 10px 16px;"></div>
+                    <div class="text-info text-center mt-3"><h4 style="font-size: 15px; color: rgb(112, 112, 112);;">Supervisior</h4></div>
+                    <div class="text-info text-center mt-3"><a style="text-decoration: underline; color: rgb(112, 112, 112);;" href="@($"/addsupervisior/{ProjectId}")">Add Doctor</a></div>
+                </div>
+            </div>
+
+        }
+        else
+        {
+            <div class="col-md-4">
+                <div class="card mx-sm-1 p-3" style="border: 1px solid rgb(112, 112, 112); width: 90%;max-height: 200px;height:200px;margin-left:70px">
+                    <div class="card shadow text-info  my-card" style="width: 60px; border: 1px solid rgb(112, 112, 112);margin-left:100px"><img src="/images/project/man.png" alt="" style="width: 40%; margin: 10px 0px 10px 16px;"></div>
+                    <div class="text-info text-center mt-3"><h4 style="font-size: 15px; color: rgb(112, 112, 112);;">Supervisior</h4></div>
+                    <div class="text-info text-center mt-2"><h1 style="font-size: 20px; color: rgb(112, 112, 112);;">@Project.SuperVisior.Name</h1></div>
+                </div>
+            </div>
+        }
+        <!-- /supervisior -->
+        <!-- developers -->
+        <div class="col-md-4">
+            <div class="card border-info mx-sm-1 p-3" style="width: 90%;max-height: 200px;height:200px;margin-left:70px">
+                <div style="overflow: auto; width: 100%; max-height: 200px;">
+                    <div class="card border-info shadow text-info  my-card" style="width: 60px;margin-left:92px"><img src="/images/project/groups.png" alt="" style="width: 45%; margin: 10px 0px 10px 16px;"></div>
+                    <div class="text-info text-center mt-3"><h4 class="text-info" style="font-size: 15px;">Members</h4></div>
+
+                    @if (@Project.Developer.Count() == 0)
+                    {
+                        <div class="text-info text-center mt-3"><a class="text-info" style="text-decoration: underline;" href="@($"/adddeveloper/{ProjectId}")">Add Developer</a></div>
+
+                    }
+                    else
+                    {
+                        <div class="text-info mt-2">
+                            <ul style="margin-top: 15px;">
+                                @foreach (var dev in Project.Developer.OrderBy(n => n.Name))
+                                {
+                                    <li type="disc" style="font-weight: bold;">
+                                        <span>
+                                            @dev.Name
+                                            <button class="border-0 btn-transition btn btn-outline-danger"
+                                                    @onclick="@(e=>DeleteDeveloperAsync(dev.Id))">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </span>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
+
+
+                </div>
+            </div>
+        </div>
+        <!-- /developers -->
+        <!-- evaluation -->
+        <div class="col-md-4">
+            <div class="card border-danger mx-sm-1 p-3" style="width: 90%;max-height: 200px;height:200px;margin-left:70px">
+                <div class="card shadow text-info border-danger my-card" style="width: 60px; border: 1px solid rgb(112, 112, 112);margin-left:100px"><img src="/images/project/evaluation.png" alt="" style="width: 40%; margin: 10px 0px 10px 16px;"></div>
+                <div class=" text-center mt-3"><h4 class="text-danger" style="font-size: 15px">Evaluation</h4></div>
+                @if (Project.Evalution.ToString() == "None")
+                {
+                    <div class="text-danger text-center mt-2"><h1 class="text-danger" style="font-size: 20px;">@Project.Evalution</h1></div>
+                }
+                else
+                {
+                    <div class="text-danger text-center mt-2"><h1 class="text-danger" style="font-size: 20px;">@Project.Evalution</h1></div>
+                    <div class="text-danger text-center mt-2"><h1 class="text-danger" style="font-size: 20px;">@Project.Mark</h1></div>
+                }
+            </div>
+        </div>
+        <!-- /evaluation -->
+    </div>
+</div>
+<div class="row" style="margin-bottom:20px">
+    <div class="offset-4 col-md-4" style="text-align: center; margin-top: 15px;">
+        <a class="btn btn-primary" style="width:90%; border-radius: 20px;" href="@($"/adddeveloper/{ProjectId}")">Add Developer</a>
+    </div>
+</div>
+<br>
+
+<!-- related projects -->
+<section class="section pt-0">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h2 class="section-title">Other Projects</h2>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- course item -->
+            @if (Projects != null)
+            {
+                @foreach (var project in Projects)
+                {
+                    <div class="col-lg-4 col-sm-6 mb-5">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow" style="width: 300px;">
+                            @if (project != null && project.ProjectLogo != null)
+                            {
+                                Logos = project.ProjectLogo.Split("wwwroot");
+                                //ProjectPath = project.ProjectPath.Split("wwwroot");
+                                <a href="@($"/projectdetails/{project.Id}")" @onclick="()=>HandleClick(project.Id)">
+                                    <img class="card-img-top rounded-0"
+                                         style="width:320px;height:220px"
+                                         src="@(Localhost + Logos[1])" alt="@project.ProjectName">
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@($"/projectdetails/{project.Id}")" @onclick="()=>HandleClick(project.Id)">
+                                    <img class="card-img-top rounded-0"
+                                         style="width:320px;height:220px"
+                                         src="/images/courses/course-2.jpg" alt="@project.ProjectName">
+                                </a>
+
+                            }
+                            <div class="card-body">
+                                <a href="@($"/projectdetails/{project.Id}")" @onclick="()=>HandleClick(project.Id)">
+                                    <h4 class="card-title">@project.ProjectName</h4>
+                                </a>
+                                <a href="@($"/projectdetails/{project.Id}")" @onclick="()=>HandleClick(project.Id)"
+                                   class="btn btn-primary btn-sm">Dicover</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <h1>Loading</h1>
+            }
+            <!-- /course item -->
+        </div>
+    </div>
+</section>
+<!-- /related course -->

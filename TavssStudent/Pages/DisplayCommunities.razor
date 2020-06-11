@@ -1,0 +1,55 @@
+﻿@page "/communities"
+@inherits DisplayCommunitiesBase
+
+
+<PageTitle Title="All Communities"></PageTitle>
+<section class="section">
+    <div class="container">
+        <div class="row justify-content-center">
+            @if (Communties == null)
+            {
+                <div class="spinner"></div>
+
+            }
+            else
+            {
+                <!-- course item -->
+                @foreach (var community in Communties)
+                {
+                    <div class="col-lg-4 col-sm-6 mb-5" style="min-width: 18rem; max-width:30.5%;">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow">
+                            @{
+                                if (community != null && community.LogoPath != null && community.LogoPath.Contains("wwwroot"))
+                                {
+                                    Logo = community.LogoPath.Split("wwwroot");
+
+                                    @*<img class="card-img-top" style="width:410px;height:340px" src="@(Localhost + Logo[1])" alt="@community.Name">*@
+                                    <a href="@($"/communitydetails/{community.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:290px;height:220px" src="@(Localhost + Logo[1])" alt="@community.Name">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@($"/communitydetails/{community.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:290px;height:220px" src="images/courses/course2.jpg" alt="@community.Name">
+                                    </a> 
+                                }
+                            }
+
+                            <div class="card-body">
+                                <a href="@($"/communitydetails/{community.Id}")">
+                                    <h4 class="card-title project-name">@community.Name</h4>
+                                    <p>@community.Description</p>
+                                </a>
+                                <div class="text-center">
+                                    <a href="@($"/communitydetails/{community.Id}")" class="btn btn-primary btn-sm">Discover</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- /course item -->
+            }
+        </div>
+    </div>
+</section>

@@ -1,0 +1,79 @@
+﻿@*@page "/uploadproject/{ProjectId}"
+@inject HttpClient client
+@inject TavssStudent.Services.IProjectService ProjectService
+
+<h1>Single file</h1>
+
+<p>A single file input that uploads automatically on file selection</p>
+
+<InputFile OnChange="HandleSelection" />
+
+<p>@status</p>
+
+@code {
+
+    string status;
+
+    [Parameter]
+    public string ProjectId { get; set; }
+
+    async Task HandleSelection(IFileListEntry[] files)
+    {
+        var file = files.FirstOrDefault();
+        if (file != null)
+        {
+            
+            var ms = new MemoryStream();
+            await file.Data.CopyToAsync(ms);
+
+            status = $"Finished loading {file.Size} bytes from {file.Name}";
+
+            var content = new MultipartFormDataContent {
+                { new ByteArrayContent(ms.GetBuffer()), "\"upload\"", file.Name }
+            };
+            var response=await client.PutAsync($"api/MongoProject/api/v1/project/UploadProject/{ProjectId}", content);
+            if (response.IsSuccessStatusCode)
+            {
+                var r=true;
+            }
+        }
+    }
+}*@
+
+
+
+
+
+
+
+
+
+@*<h1>Upload The Project</h1>
+
+    <p>A project uploads automatically on file selection</p>
+    <EditForm Model="Files" OnValidSubmit="@HandleValidSubmit">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <InputFile @bind-Value="@Files" />
+        <button type="submit">save</button>
+    </EditForm>*@
+@*<InputFile @bind-Value="@Project.Name" OnChange="()=>HandleSelection" />*@
+
+@*<p>@status</p>*@
+
+@*@code {
+        string status;
+        [Parameter]
+        public string ProjectId { get; set; }
+
+        public IFileListEntry Files { get; set; }
+
+        protected async Task HandleValidSubmit()
+        {
+            await ProjectService.UploadProject(ProjectId, Files);
+
+
+        }
+
+    }*@

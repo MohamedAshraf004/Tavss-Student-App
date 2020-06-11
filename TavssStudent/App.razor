@@ -1,0 +1,24 @@
+﻿<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(Program).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)">
+                <NotAuthorized>
+                    <PageTitle Title="Access Denied"></PageTitle>
+                    <h1>Sorry, you're not login to view this page.</h1>
+                    <NavLink Match="NavLinkMatch.All">
+                        <a class="dropdown-item btn btn-primary-outline" href="/identity/account/login">Click Here To Login</a>
+                    </NavLink>
+                    <NavLink Match="NavLinkMatch.All">
+                        <a class="dropdown-item btn btn-primary-outline" href="/identity/account/register">Or Register</a>
+                    </NavLink>
+                    <p>You may want to try logging in (as someone with the necessary authorization).</p>
+                </NotAuthorized>
+            </AuthorizeRouteView>
+        </Found>
+        <NotFound>
+            <LayoutView Layout="@typeof(MainLayout)">
+                <p>Sorry, there's nothing at this address.</p>
+            </LayoutView>
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>

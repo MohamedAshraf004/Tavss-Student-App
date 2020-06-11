@@ -1,0 +1,61 @@
+﻿@page "/courses"
+@inherits DisplayCoursesBase
+<!-- page title -->
+<PageTitle Title="All Courses"></PageTitle><!-- /page title -->
+@if (Courses == null)
+{
+    <div class="spinner"></div>
+
+
+
+}
+else
+{
+    <section class="section">
+        <div class="container">
+            <!-- course list -->
+            <div class="row justify-content-center">
+                <!-- course item -->
+                @foreach (var course in Courses)
+                {
+                    <div class="col-lg-4 col-sm-6 mb-5">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow">
+                            @{
+                                if (course != null && course.LogoPath != null && course.LogoPath.Contains("wwwroot"))
+                                {
+                                    Logo = course.LogoPath.Split(@"wwwroot\");
+                                    //ProjectPath = project.ProjectPath.Split("wwwroot");
+                                    <a href="@($"/coursedetails/{course.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:320px;height:220px"
+                                             asp-append-version="true" src="@(Localhost + Logo[1])" alt="@course.Name">
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a href="@($"/coursedetails/{course.Id}")">
+                                        <img class="card-img-top rounded-0" asp-append-version="true" style="width:320px;height:220px"
+                                             src="images/courses/course1.jpg" alt="@course.Name">
+                                    </a>
+                                }
+                            }
+                            <div class="card-body">
+                                <a href="@($"/coursedetails/{course.Id}")">
+                                    <h4 class="card-title"> @course.Name</h4>
+                                </a>
+                                <p class="card-text mb-4">
+                                    @*@foreach (var doctor in (CourseService.GetDotorsForCourse(course.Id)).GetAwaiter().GetResult().ToList())
+                                    {
+                                        <h4>@doctor</h4>
+                                    }*@
+                                </p>
+                                <a href="@($"/coursedetails/{course.Id}")" class="btn btn-primary btn-sm">Start</a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+        </div>
+    </section>
+}

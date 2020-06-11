@@ -1,0 +1,320 @@
+﻿@page "/communitydetails/{CommunityId}"
+@inherits CommunityDetailsBase
+@attribute [Authorize]
+
+@{
+    var localhost = SD.CourseLocalhost;
+}
+@*<link href="~/font-awesome/css/fontawesome.css" rel="stylesheet" />*@
+
+<!-- page title -->
+<PageTitle Title="Community Details"></PageTitle>
+<!-- /page title -->
+
+
+
+@if (Community == null)
+{
+    <h1>
+        Loading
+    </h1>
+    <div class="spinner d-inline-block"></div>
+
+
+}
+else
+{
+    <!-- Course section -->
+    <section class="section-sm" style="padding-top: 30px; padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex align-items-center section-title justify-content-between">
+                        <h2 class="mb-0 text-nowrap mr-3">COURSES</h2>
+                        <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                        <div>
+                            <a href="/courses" style="width: 140px;" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- course list -->
+            <div class="row justify-content-center">
+                @if (Courses.Count() == 0)
+                {
+                    <h1 class="btn-outline-info offset-2"> No Courses</h1>
+                }
+                else
+                {
+
+                    @foreach (var course in Courses)
+                    {
+                        <!-- course item -->
+                        <div class="col-lg-4 col-sm-6 mb-5">
+                            <div class="card p-0 border-primary rounded-0 hover-shadow">
+                                @{
+                                    if (course != null && course.LogoPath != null && course.LogoPath.Contains("wwwroot"))
+                                    {
+                                        Logo = course.LogoPath.Split(@"wwwroot\");
+
+                                        <a href="@($"/coursedetails/{course.Id}")">
+                                            <img class="card-img-top rounded-0" style="width:320px;height:220px"
+                                                 asp-append-version="true" src="@(localhost + Logo[1])" alt="@course.Name">
+                                        </a>
+                                    }
+                                    else
+                                    {
+
+                                        <a href="@($"/coursedetails/{course.Id}")">
+                                            <img class="card-img-top rounded-0" style="width:320px;height:220px"
+                                                 src="images/courses/course1.jpg" alt="@course.Name">
+                                        </a>
+
+                                    }
+                                }
+                                <div class="card-body">
+                                    <a href="course-lectures.html">
+                                        <h4 class="card-title">@course.Name</h4>
+                                    </a>
+                                    <p class="card-text mb-4">
+                                        Programming Course
+                                    </p>
+                                    <a href="@($"/coursedetails/{course.Id}")" class="btn btn-primary btn-sm">Browse</a>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+            <!-- /course list -->
+            <!-- mobile see all button -->
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="@($"/courses")" style="width: 140px;" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">See All</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /end course section -->
+
+    <!--Posts Section-->
+    <section class="section-sm" style="padding-top: initial; padding-bottom: 20px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex align-items-center section-title justify-content-between">
+                        <h2 class="mb-0 text-nowrap mr-3">Posts</h2>
+                        <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                        <div>
+                            @if (Post != null)
+                            {
+                                <a href="@($"posts/{CommunityId}")" style="width: 140px;" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+
+                            }
+                            else
+                            {
+                                <a href="@($"posts/{CommunityId}")" style="width: 140px;" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- course list -->
+            <div class="card mb-4" style="width:800px;margin-left:80px;">
+                @if (Post != null)
+                {
+                    @if (Path != null)
+                    {
+                        <img class="card-img-top" style="height:300px;width:800px;"
+                             src="@(Localhost + Path[1])" alt="@Post.Title">
+
+                    }
+                    else
+                    {
+                        <img class="card-img-top" style="height:300px;width:800px;" src="/images/blog/post-3.jpg" alt="Card image cap">
+                    }
+                    <div class="card-body">
+                        <h2 class="card-title">@Post.Title</h2>
+                        <p class="card-text">@Post.Description</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted on @Post.Time by
+                        <a href="#">@Developer.Name</a>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-body">
+                        <h2 class="card-title">No Posts</h2>
+                    </div>
+                    <button @onclick="@QuickAddPost" class="btn btn-dark table-btn quick-add-btn ">&nbsp;&nbsp;+&nbsp;&nbsp;</button>
+                    <AddPostDialog CommunityId="@CommunityId" @ref="@AddPostDialog" CloseEventCallback="@AddPostDialog_OnDialogClose"></AddPostDialog>
+                }
+            </div>
+            <!-- /course list -->
+            <!-- mobile see all button -->
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="@($"/posts/{CommunityId}")" style="width: 140px;" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">See All</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!--Posts Section-->
+    <!-- Compaies section -->
+    <section class="section-sm">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex align-items-center section-title justify-content-between">
+                        <h2 class="mb-0 text-nowrap mr-3">Campaines</h2>
+                        <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                        <div>
+                            @if (Community.Companies.Count() == 0)
+                            {
+                                <a href="@($"/companies")" style="width: 140px;" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                            }
+                            else
+                            {
+                                <a href="@($"/companies/{Community.Id}")" style="width: 140px;" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row ">
+                @if (Community.Companies.Count() == 0)
+                {
+                    <h1 class="btn-outline-info offset-2">No Companies</h1>
+                }
+                else
+                {
+                    @foreach (var company in Community.Companies.Take(2))
+                    {
+                        <!-- course item -->
+                        <div class=" col-sm-6 mb-5" style="width: 500px">
+                            <div class="card p-0 border-primary rounded-0 hover-shadow">
+                                @{
+                                    if (company != null && company.LogoPath != null && company.LogoPath.Contains("wwwroot"))
+                                    {
+                                        Logo = company.LogoPath.Split(@"wwwroot\");
+
+                                        <img class="card-img-top rounded-0" style="width:410px;height:340px"
+                                             asp-append-version="true" src="@(Localhost + Logo[1])" alt="@company.Name">
+                                    }
+                                    else
+                                    {
+                                        <img class="card-img-top rounded-0" style="width:410px;height:340px"
+                                             src="images/courses/course-1.jpg" alt="@company.Name">
+                                    }
+                                }
+                                <div class="card-body">
+                                    <h4 class="d-none d-sm-block">Name</h4>
+                                    <p class="card-text mb-4"> @company.Name </p>
+                                    <h6 class="d-none d-sm-block">Description</h6>
+                                    <p class="card-text mb-4"> @company.Description </p>
+                                    <h6 class="d-none d-sm-block">Address</h6>
+                                    <p class="card-text mb-4"> @company.Address</p>
+                                    <h6 class="d-none d-sm-block">Start Date</h6>
+                                    <p class="card-text mb-4"> @company.StartDate.ToShortDateString()</p>
+                                    <div class="social-link">
+                                        <h6 class="d-none d-sm-block">Social Links</h6>
+                                        <ul class="list-inline">
+                                            <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="https://twitter.com/Lionelmido004"><i class="fa fa-twitter"></i></a></li>
+                                            <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-facebook-square"></i></a></li>
+                                            <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-github"></i></a></li>
+                                            <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-linkedin-square"></i></a></li>
+                                            <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-instagram"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- company item -->
+
+                    }
+                    <!-- mobile see all button -->
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <a href="@($"/companies/{Community.Id}")" style="width: 140px;" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">See All</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+    <!-- Compaies section -->
+
+    <!--developer section-->
+    <section class="section-sm" style="padding-top: 35px; padding-bottom: 25px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="d-flex align-items-center section-title justify-content-between">
+                        <h2 class="mb-0 text-nowrap mr-3">The most famous developers</h2>
+                        <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                        <div>
+                            <a href="@($"/developers/{Community.Id}")" style="width: 140px;" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- course list -->
+            <div class="row justify-content-center">
+                <!-- course item -->
+                <div class="container">
+                    @if (Community.Developers.Count() == 0)
+                    {
+                        <h1 class="btn-outline-info offset-2">No Developers</h1>
+                    }
+                    else
+                    {
+                        @foreach (var developer in Community.Developers.Take(2))
+                        {
+                            <div class="row">
+                                <!-- teacher -->
+                                <div class="col-12">
+                                    <h5 class="mb-3">Developer</h5>
+                                    <div class="d-flex justify-content-between align-items-center flex-wrap">
+                                        <div class="media mb-2 mb-sm-0">
+                                            <img class="mr-4 img-fluid" src="images/teacher.jpg" alt="Teacher">
+                                            <div class="media-body">
+                                                <h4 class="mt-0">@developer.Name</h4>
+                                            </div>
+                                        </div>
+                                        <div class="social-link">
+                                            <h6 class="d-none d-sm-block">Social Link</h6>
+                                            <ul class="list-inline">
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-twitter"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-facebook-square"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-github"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-linkedin-square"></i></a></li>
+                                                <li class="list-inline-item"><a class="d-inline-block text-light p-1" href="#"><i class="fa fa-instagram"></i></a></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="border-bottom border-primary mt-4"></div>
+                                </div>
+                            </div>
+
+                        }
+
+                    }
+                </div>
+            </div>
+            <!-- /course list -->
+            <!-- mobile see all button -->
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="@($"/developers/{Community.Id}")" style="width: 140px;" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">See All</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- /developer section -->
+
+}
+
+
+
+

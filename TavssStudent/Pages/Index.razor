@@ -1,0 +1,261 @@
+﻿@page "/"
+@inherits IndesBase
+
+<Slidar />
+
+<!-- banner-feature -->
+<section class="container bg-gray">
+    <div class="container-fluid p-0">
+        <div class="row no-gutters">
+            <div class="col-xl-4 col-lg-5 align-self-end">
+                <h3 class="Acclaims-home"> ACCLAIMS</h3>
+                <img class="img-fluid w-100" src="images/banner/banner-feature.png" alt="banner-feature">
+            </div>
+            <div class="col-xl-8 col-lg-7">
+                <div class="row feature-blocks bg-gray justify-content-between">
+                    <div class="col-sm-6 col-xl-5 mb-xl-5 mb-lg-3 mb-4 text-center text-sm-left">
+                        <!-- <i class="ti-book mb-xl-4 mb-lg-3 mb-4 feature-icon"></i> -->
+                        <a href="#" target="_blank"> <img src="/images/acclaims/ng.jpg" class="user-img Acclaims-home-img"> </a>
+                        <a href="#" target="_blank"> <h3 class="mb-xl-4 mb-lg-3 mb-4">Angular</h3> </a>
+                    </div>
+
+                    <div class="col-sm-6 col-xl-5 mb-xl-5 mb-lg-3 mb-4 text-center text-sm-left">
+                        <!-- <i class="ti-book mb-xl-4 mb-lg-3 mb-4 feature-icon"></i> -->
+                        <a href="#" target="_blank"> <img src="/images/acclaims/html.jpg" class="user-img Acclaims-home-img"> </a>
+                        <a href="#" target="_blank"> <h3 class="mb-xl-4 mb-lg-3 mb-4">HTMl</h3> </a>
+                    </div>
+                    <div class="col-sm-6 col-xl-5 mb-xl-5 mb-lg-3 mb-4 text-center text-sm-left">
+                        <!-- <i class="ti-book mb-xl-4 mb-lg-3 mb-4 feature-icon"></i> -->
+                        <a href="#" target="_blank"> <img src="/images/acclaims/js.jpg" class="user-img Acclaims-home-img"> </a>
+                        <a href="#" target="_blank"> <h3 class="mb-xl-4 mb-lg-3 mb-4">Javascript</h3> </a>
+                    </div>
+                    <div class="col-sm-6 col-xl-5 mb-xl-5 mb-lg-3 mb-4 text-center text-sm-left">
+                        <!-- <i class="ti-book mb-xl-4 mb-lg-3 mb-4 feature-icon"></i> -->
+                        <a href="#" target="_blank"> <img src="/images/acclaims/zure.jpg" class="user-img Acclaims-home-img"> </a>
+                        <a href="#" target="_blank"> <h3 class="mb-xl-4 mb-lg-3 mb-4">Azure</h3> </a>
+                    </div>
+                    <div class="col-sm-9"></div>
+                    <div class="col-sm-3">
+                        <a href="/acclaims" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">see all</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /banner-feature -->
+
+<!-- courses -->
+<section class="section-sm" style="padding-top: 115px; padding-bottom: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <h2 class="mb-0 text-nowrap mr-3">COURSES</h2>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                    <div>
+                        <a href="/courses" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- course list -->
+        <div class="row justify-content-center">
+            <!-- course item -->
+            @if (HomeViewModel.Courses != null)
+            {
+                @foreach (var course in HomeViewModel.Courses.Take(3))
+                {
+                    <div class="col-lg-4 col-sm-6 mb-5">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow">
+                            @{
+                                if (course != null && course.LogoPath != null && course.LogoPath.Contains("wwwroot"))
+                                {
+                                    Logo = course.LogoPath.Split(@"wwwroot\");
+                                    //ProjectPath = project.ProjectPath.Split("wwwroot");
+                                    <a href="@($"/coursedetails/{course.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:310px;height:220px"
+                                             asp-append-version="true" src="@(CourseLocalhost + Logo[1])" alt="@course.Name">
+                                    </a>
+
+                                }
+                                else
+                                {
+                                    <a href="@($"/coursedetails/{course.Id}")">
+                                        <img class="card-img-top rounded-0" asp-append-version="true" style="width:310px;height:220px"
+                                             src="images/courses/course1.jpg" alt="@course.Name">
+                                    </a>
+                                }
+                            }
+                            <div class="card-body">
+                                <a href="@($"/coursedetails/{course.Id}")">
+                                    <h4 class="card-title"> @course.Name</h4>
+                                </a>                               
+                                <a href="@($"/coursedetails/{course.Id}")" class="btn btn-primary btn-sm">Start</a>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                <!-- /course item -->
+
+            }
+            else
+            {
+                <h1>Loading</h1>
+            }
+
+        </div>
+        <!-- /course list -->
+        <!-- mobile see all button -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="/courses" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">See All</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /courses -->
+
+<!-- Projects -->
+<section class="section-sm">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <div>
+                        <a href="/projects" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                    </div>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                    <h2 class="mb-0 text-nowrap mr-3">PROJECTS</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- project item -->
+            @if (HomeViewModel.Projects != null)
+            {
+                @foreach (var project in HomeViewModel.Projects.Take(3))
+                {
+                    <!-- project item -->
+                    <div class="col-lg-4 col-sm-6 mb-5">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow">
+                            @{
+                                if (project != null && project.ProjectLogo != null)
+                                {
+                                    Logo = project.ProjectLogo.Split("wwwroot");
+                                    //ProjectPath = project.ProjectPath.Split("wwwroot");
+                                    <a href="@($"/projectdetails/{project.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:310px;height:220px"                                            
+                                             src="@(ProjectLocalhost + Logo[1])" alt="@project.ProjectName">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@($"/projectdetails/{project.Id}")">
+                                        <img class="card-img-top rounded-0"
+                                             style="width:310px;height:220px"
+                                             src="/images/courses/course-2.jpg" alt="@project.ProjectName">
+                                    </a>
+
+                                }
+                            }
+                            <div class="card-body">
+                                <a href="@($"/projectdetails/{project.Id}")">
+                                    <h4 class="card-title project-name">@project.ProjectName</h4>
+                                </a>
+                                <div class="text-center">
+                                    <a href="@($"/projectdetails/{project.Id}")" class="btn btn-primary btn-sm">Start</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- /project item -->
+                }
+            }
+            else
+            {
+                <h1>Loading</h1>
+            }
+            <!-- /project item -->
+        </div>
+
+        <!-- mobile see all button -->
+        <div class="row">
+            <div class="col-12 text-center">
+                <a href="/projects" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">sell all</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Project -->
+
+<!-- community -->
+<section class="section-sm" style="padding-top: 20px; padding-bottom: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <h2 class="mb-0 text-nowrap mr-3">COMMUNITIES</h2>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                    <div>
+                        <a href="/communities" class="btn btn-sm btn-primary-outline ml-sm-3 d-none d-sm-block">See All</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <!-- community item -->
+            @if (HomeViewModel.Communities == null)
+            {
+                <h1 class="btn-outline-info offset-1">Loading</h1>
+            }
+            else
+            {
+                <!-- course item -->
+                @foreach (var community in HomeViewModel.Communities.Take(3))
+                {
+                    <div class="col-lg-4 col-sm-6 mb-5" style="min-width: 18rem; max-width:30.5%;">
+                        <div class="card p-0 border-primary rounded-0 hover-shadow">
+                            @{
+                                if (community != null && community.LogoPath != null && community.LogoPath.Contains("wwwroot"))
+                                {
+                                    Logo = community.LogoPath.Split("wwwroot");
+
+                                    @*<img class="card-img-top" style="width:410px;height:340px" src="@(Localhost + Logo[1])" alt="@community.Name">*@
+                                    <a href="@($"/communitydetails/{community.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:290px;height:220px" src="@(CommunityLocalhost + Logo[1])" alt="@community.Name">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a href="@($"/communitydetails/{community.Id}")">
+                                        <img class="card-img-top rounded-0" style="width:290px;height:220px" src="images/courses/course2.jpg" alt="@community.Name">
+                                    </a>
+                                }
+                            }
+                            <div class="card-body">
+                                <a href="@($"/communitydetails/{community.Id}")">
+                                    <h4 class="card-title project-name">@community.Name</h4>
+                                    <p>@community.Description</p>
+                                </a>
+                                <div class="text-center">
+                                    <a href="@($"/communitydetails/{community.Id}")" class="btn btn-primary btn-sm">Discover</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <!-- /course item -->
+            }
+            <!-- /community item -->
+            <!-- mobile see all button -->
+            <div class="row">
+                <div class="col-12 text-center">
+                    <a href="/communities" class="btn btn-sm btn-primary-outline d-sm-none d-inline-block">See All</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /community -->

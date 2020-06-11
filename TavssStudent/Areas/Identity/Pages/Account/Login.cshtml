@@ -1,0 +1,144 @@
+﻿@page
+@model LoginModel
+
+@{
+    Layout = "_IdentityLayout";
+    ViewData["Title"] = "Log in";
+}
+<link href="~/Identity/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+<link href="~/Identity/style.css" rel="stylesheet" />
+<link href="~/Identity/main.css" rel="stylesheet" />
+<a href="/">
+    <p class="tip">
+        TAVSS
+    </p>
+</a><div class="container">
+    <div class="row">
+        <div class="cont">
+
+            <div class="card sign-in">
+                <h2>Welcome back,</h2>
+                <div class="card-body">
+                    <form id="account" asp-page-handler="OnPost" method="post" >
+                        <div asp-validation-summary="All" class="text-danger"></div>
+                        <div class="input-group form-group">
+
+                            <input asp-for="InputLogin.Email" class="form-control " placeholder="username">
+                            <span asp-validation-for="InputLogin.Email" class="text-danger"></span>
+                        </div>
+                        <div class="input-group form-group">
+
+                            <input asp-for="InputLogin.Password" class="form-control" placeholder="password">
+                            <span asp-validation-for="InputLogin.Password" class="text-danger"></span>
+                        </div>
+                        <div class="row align-items-center remember">
+                            <input asp-for="InputLogin.RememberMe"> <span> Remember Me </span>
+                        </div>
+                        <br><br>
+                        <div class="container-login100-form-btn">
+                            <input type="submit" value="Sign In" class="login100-form-btn offset-2 col-3" style="margin-left: 170px;" />
+                        </div>
+                        <div class="form-group">
+                            <p>
+                                <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                            </p>
+                            <p>
+                                <a asp-page="./Register"  asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                            </p>
+                            <p>
+                                <a id="resend-confirmation" asp-page="./ResendEmailConfirmation">Resend email confirmation</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="sub-cont">
+                <div class="img">
+                    <div class="img__text m--up">
+                        <h2>New here?</h2>
+                        <p>Sign up and discover great amount of new opportunities!</p>
+                    </div>
+                    <div class="img__text m--in">
+                        <h2>One of us?</h2>
+                        <p>If you already has an account, just sign in. We've missed you!</p>
+                    </div>
+                    <div class="img__btn">
+                        <span class="m--up">Sign Up</span>
+                        <span class="m--in"> Sign In</span>
+                    </div>
+                </div>
+
+                <div class="card sign-up">
+                    <h2>Time to feel like home,</h2>
+                    <div class="card-body">
+                        <form asp-page-handler="Register" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+                            <div asp-validation-summary="All" class="text-danger"></div>                            
+                            <div class="input-group form-group">
+                                <input asp-for="InputRegister.FullName" class="form-control" placeholder="Full Name">
+                                <span asp-validation-for="InputRegister.FullName" class="text-danger"></span>
+                            </div>
+                            <div class="input-group form-group">
+                                <input asp-for="InputRegister.Email" class="form-control" placeholder="Email">
+                                <span asp-validation-for="InputRegister.Email" class="text-danger"></span>
+                            </div>
+                            <div class="input-group form-group">
+                                <input asp-for="InputRegister.Password" class="form-control" placeholder="Password">
+                                <span asp-validation-for="InputRegister.Password" class="text-danger"></span>
+                            </div>
+                            <div class="input-group form-group">
+                                <input asp-for="InputRegister.ConfirmPassword" class="form-control" placeholder="Confirm Password">
+                                <span asp-validation-for="InputRegister.ConfirmPassword" class="text-danger"></span>
+                            </div>
+                            <div class="input-group form-group">
+                                <input asp-for="InputRegister.Phone" class="form-control" placeholder="Phone">
+                                <span asp-validation-for="InputRegister.Phone" class="text-danger"></span>
+                            </div>
+                            <br><br>
+                                <div class="form-group">
+                                    <input type="submit" value="Sign up" class="login100-form-btn offset-2 col-3" style="margin-left: 170px;" />
+                                </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 col-md-offset-2">
+        <section>
+            @*<h4>Use another service to log in.</h4>*@
+            <hr />
+            @{
+                if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                {
+                }
+                else
+                {
+                    <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                        <div>
+                            <p>
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                }
+                            </p>
+                        </div>
+                    </form>
+                }
+            }
+        </section>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>
+        document.querySelector('.img__btn').addEventListener('click', function () {
+            document.querySelector('.cont').classList.toggle('s--signup');
+        });
+    </script>
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,63 @@
+﻿@page "/adddone/{ProjectId}"
+@inherits AddDoneBase
+@attribute [Authorize]
+<!-- page title -->
+<PageTitle Title="Add Done Task"></PageTitle>
+
+<!--/page title -->
+
+
+
+<section class="section-sm" style="padding-top: 77px; padding-bottom: 20px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="d-flex align-items-center section-title justify-content-between">
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                    <h2 class="mb-0 text-nowrap mr-3" style="margin-left: 1rem;">Add Done</h2>
+                    <div class="border-top w-100 border-primary d-none d-sm-block"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<EditForm Model="@Done" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label for="exampleInputEmail1" style="font-size: 20px; font-weight: bold; color: #2692d4e3;">Done Name</label>
+                    @*<input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="">*@
+                    <InputText id="firstName" class="form-control" placeholder="Name"
+                               @bind-Value="Done.Name" />
+                    <ValidationMessage For="@(() => Done.Name)" />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1" style="font-size: 20px; font-weight: bold; color: #2692d4e3;">Notes</label>
+                    <InputText id="lastName" class="form-control" placeholder="Notes"
+                               @bind-Value="Done.Descreption" />
+                    <ValidationMessage For="@(() => Done.Descreption)" />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1" style="font-size: 20px; font-weight: bold; color: #2692d4e3;">StartDate</label>
+                    <InputDate @bind-Value="Done.StartDate" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1" style="font-size: 20px; font-weight: bold; color: #2692d4e3;">EndDate</label>
+                    <InputDate @bind-Value="Done.EndDate" class="form-control" />
+                </div>
+            </div>
+
+            <div class="col-12" style="text-align: center; margin-bottom: 103px;">
+                <button class="btn btn-primary" type="submit">Create</button>
+                <a class="btn btn-primary" href="@($"/projectdetails/{ProjectId}")">Back to the project</a>
+            </div>
+
+        </div>
+    </div>
+</EditForm>
+
+

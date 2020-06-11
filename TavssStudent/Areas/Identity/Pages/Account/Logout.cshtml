@@ -1,0 +1,31 @@
+﻿@page
+@model LogoutModel
+@{
+    ViewData["Title"] = "Log out";
+}
+
+<!-- Bootstrap -->
+<link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+<link href="~/lib/bootstrap/css/bootstrap.bundle.css" rel="stylesheet" />
+<!-- slick slider -->
+<link rel="stylesheet" href="~/plugins/slick/slick.css">
+
+<!-- Main Stylesheet -->
+<link href="~/css/style.css" rel="stylesheet">
+
+<div class="preloader">
+    <img src="/images/preloader.gif" alt="preloader">
+</div>
+
+<script>
+    $(window).on('load', function () {
+        $('.preloader').fadeOut(700);
+    });
+</script>
+<script>
+    window.onload = function () {
+        var form = document.getElementById("logoutForm");
+        form.submit();
+    }
+</script>
+
